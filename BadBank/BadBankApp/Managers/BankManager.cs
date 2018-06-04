@@ -1,29 +1,21 @@
 using System;
 using System.Linq;
-using GoodBankApp.Factories;
-using GoodBankApp.Models;
+using BadBankApp.Models;
 
-namespace GoodBankApp.Managers
+namespace BadBankApp.Managers
 {
-    public class BankManager : IBankManager
+    public class BankManager
     {
-        readonly IAccountManager _accountManager;
-        readonly IBankFactory _bankFactory;
+        readonly AccountManager _accountManager;
 
-        public BankManager(IBankFactory bankFactory, IAccountManager accountManager)
-        {
-            _bankFactory = bankFactory ?? throw new ArgumentNullException(nameof(bankFactory));
-            _accountManager = accountManager ?? throw new ArgumentNullException(nameof(accountManager));
-        }
+        public BankManager() => _accountManager = new AccountManager();
 
         private Account SearchAccount(Bank bank, Guid id)
         {
-            if(bank == null) throw new ArgumentNullException(nameof(bank));
+            if (bank == null) throw new ArgumentNullException(nameof(bank));
             return bank.Accounts.FirstOrDefault(x => x.Id == id) ?? throw new Exception($"Account with id '{id}' not found");
         }
 
-        public Bank OpenBank(string name, params Account[] accounts) => _bankFactory.Create(name, accounts);
-        
         public void TransferMoney(Bank bank, decimal money, Guid sourceId, Guid targetId)
         {
             var source = SearchAccount(bank, sourceId);
