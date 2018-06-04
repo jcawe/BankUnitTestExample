@@ -7,7 +7,8 @@ namespace GoodBankApp.Managers
     public class AccountManager : IAccountManager
     {
         readonly IAccountFactory _accountFatory;
-
+        public const string InsufficientFundsError = "The account doesn't have enought money";
+        public const string MoneyNegativeError = "money cannot be negative";
         public AccountManager(IAccountFactory accountFatory) 
             => _accountFatory = accountFatory ?? throw new ArgumentNullException(nameof(accountFatory));
 
@@ -16,15 +17,15 @@ namespace GoodBankApp.Managers
 
         public void Withdraw(Account account, decimal money)
         {
-            if(money < 0) throw new ArgumentException($"{nameof(money)} cannot be negative");
+            if(money < 0) throw new ArgumentException(MoneyNegativeError);
             if(account == null) throw new ArgumentNullException(nameof(account));
-            if(!CheckWithdraw(account, money)) throw new InvalidOperationException("The account doesn't have enought money");
+            if(!CheckWithdraw(account, money)) throw new InvalidOperationException(InsufficientFundsError);
 
             account.Money -= money;
         }
         public void Deposit(Account account, decimal money)
         {
-            if(money < 0) throw new ArgumentException($"{nameof(money)} cannot be negative");
+            if(money < 0) throw new ArgumentException(MoneyNegativeError);
             if(account == null) throw new ArgumentNullException(nameof(account));
 
             account.Money += money;
