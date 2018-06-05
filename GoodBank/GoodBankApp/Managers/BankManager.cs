@@ -9,6 +9,7 @@ namespace GoodBankApp.Managers
     {
         readonly IAccountManager _accountManager;
         readonly IBankFactory _bankFactory;
+        public const string AccountNotFoundError = "Account with id '{0}' not found";
 
         public BankManager(IBankFactory bankFactory, IAccountManager accountManager)
         {
@@ -19,10 +20,11 @@ namespace GoodBankApp.Managers
         private Account SearchAccount(Bank bank, Guid id)
         {
             if(bank == null) throw new ArgumentNullException(nameof(bank));
-            return bank.Accounts.FirstOrDefault(x => x.Id == id) ?? throw new Exception($"Account with id '{id}' not found");
+            return bank.Accounts.FirstOrDefault(x => x.Id == id) ?? throw new Exception(string.Format(AccountNotFoundError, id));
         }
 
-        public Bank OpenBank(string name, params Account[] accounts) => _bankFactory.Create(name, accounts);
+        public Bank OpenBank(string name, params Account[] accounts)
+            => _bankFactory.Create(name, accounts);
         
         public void TransferMoney(Bank bank, decimal money, Guid sourceId, Guid targetId)
         {

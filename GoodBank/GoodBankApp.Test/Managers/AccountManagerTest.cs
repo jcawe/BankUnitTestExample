@@ -97,7 +97,7 @@ namespace GoodBankApp.Test.Managers
                 "account"
             );
         }
-        
+
         [Test]
         public void DepositGoodCase()
         {
@@ -114,35 +114,85 @@ namespace GoodBankApp.Test.Managers
         #endregion
 
         #region OpenAccount
-            [Test]
-            public void OpenAccountTest()
-            {
-                // Given
-                var owner = new Owner(Guid.NewGuid(), "John", "Doe");
-                var money = 50;
-                var account = new Account(Guid.NewGuid(), money, owner);
+        [Test]
+        public void OpenAccountTest()
+        {
+            // Given
+            var owner = new Owner(Guid.NewGuid(), "John", "Doe");
+            var money = 50;
+            var account = new Account(Guid.NewGuid(), money, owner);
 
-                mockAccountFactory
-                    .Setup(f => f.Create(It.IsAny<Guid>(), money, owner))
-                    .Returns(account);
-                
-                // When
-                var result = manager.OpenAccount(owner, money);
+            mockAccountFactory
+                .Setup(f => f.Create(It.IsAny<Guid>(), money, owner))
+                .Returns(account);
 
-                // Then
-                mockAccountFactory.Verify(
-                    f => f.Create(It.IsAny<Guid>(), money, owner), 
-                    Times.Once()
-                );
+            // When
+            var result = manager.OpenAccount(owner, money);
 
-                Assert.AreEqual(account.Id, result.Id);
-                Assert.AreEqual(account.Money, result.Money);
-                Assert.AreEqual(account.Owner, result.Owner);
-            }
+            // Then
+            mockAccountFactory.Verify(
+                f => f.Create(It.IsAny<Guid>(), money, owner),
+                Times.Once()
+            );
+
+            Assert.AreEqual(account.Id, result.Id);
+            Assert.AreEqual(account.Money, result.Money);
+            Assert.AreEqual(account.Owner, result.Owner);
+        }
         #endregion
 
         #region ChangeOwner
-            
+        [Test]
+        public void ChangeOwnerWithNullAccount()
+        {
+            // When
+            Assert.Throws<ArgumentNullException>(
+                () => manager.ChangeOwner(null, null),
+                "account"
+            );
+        }
+
+        [Test]
+        public void ChangeOwnerWithNullOwner()
+        {
+            // Given
+            var account = CreateStubAccount(0, "John", "Doe");
+
+            // When
+            Assert.Throws<ArgumentNullException>(
+                () => manager.ChangeOwner(account, null),
+                "owner"
+            );
+
+        }
+
+        [Test]
+        public void ChangeOwnerWithSameOwner()
+        {
+            // Given
+            var owner = new Owner(Guid.NewGuid(), "John", "Doe");
+            var account = new Account(Guid.NewGuid(), 0, owner);
+
+            // When
+            Assert.Throws<InvalidOperationException>(
+                () => manager.ChangeOwner(account, owner),
+                string.Format(AccountManager.SameOwnerError, account.Id, owner.FullName)
+            );
+        }
+
+        [Test]
+        public void ChangeOwnerGoodCase()
+        {
+            // Given
+            var account = CreateStubAccount(0, "John", "Doe");
+            var owner = new Owner(Guid.NewGuid(), "Jane", "Doe");
+
+            // When
+            manager.ChangeOwner(account, owner);
+
+            // Then
+            Assert.AreEqual(owner, account.Owner);
+        }
         #endregion
     }
 }

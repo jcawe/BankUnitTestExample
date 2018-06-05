@@ -7,6 +7,7 @@ namespace GoodBankApp.Managers
     public class AccountManager : IAccountManager
     {
         readonly IAccountFactory _accountFatory;
+        public const string SameOwnerError = "The account '{0}' is already owner by {1}";
         public const string InsufficientFundsError = "The account doesn't have enought money";
         public const string MoneyNegativeError = "money cannot be negative";
         public AccountManager(IAccountFactory accountFatory) 
@@ -37,7 +38,7 @@ namespace GoodBankApp.Managers
         {
             if(account == null) throw new ArgumentNullException(nameof(account));
             if(owner == null) throw new ArgumentNullException(nameof(owner));
-            if(account.Owner == owner) throw new InvalidOperationException($"The account '{account.Id}' is already owner by {owner.FullName}");
+            if(account.Owner == owner) throw new InvalidOperationException(string.Format(SameOwnerError, account.Id, owner.FullName));
 
             account.Owner = owner;
         }

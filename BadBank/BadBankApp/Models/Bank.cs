@@ -16,7 +16,7 @@ namespace BadBankApp.Models
             }
         }
 
-        public Bank(string name, params Account[] accounts)
+        private Bank(string name, params Account[] accounts)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Accounts = accounts?.ToList() ?? new List<Account>();

@@ -10,38 +10,37 @@ namespace BadBankApp.Managers
 
         public BankManager() => _accountManager = new AccountManager();
 
-        private Account SearchAccount(Bank bank, Guid id)
+        private Account SearchAccount(Guid id)
         {
-            if (bank == null) throw new ArgumentNullException(nameof(bank));
-            return bank.Accounts.FirstOrDefault(x => x.Id == id) ?? throw new Exception($"Account with id '{id}' not found");
+            return Bank.Instance.Accounts.FirstOrDefault(x => x.Id == id) ?? throw new Exception($"Account with id '{id}' not found");
         }
 
-        public void TransferMoney(Bank bank, decimal money, Guid sourceId, Guid targetId)
+        public void TransferMoney(decimal money, Guid sourceId, Guid targetId)
         {
-            var source = SearchAccount(bank, sourceId);
-            var target = SearchAccount(bank, targetId);
+            var source = SearchAccount(sourceId);
+            var target = SearchAccount(targetId);
 
             _accountManager.Withdraw(source, money);
             _accountManager.Deposit(target, money);
         }
 
-        public Guid OpenAccount(Bank bank, Owner owner, decimal money = default(decimal))
+        public Guid OpenAccount(Owner owner, decimal money = default(decimal))
         {
             var account = _accountManager.OpenAccount(owner, money);
-            bank.Accounts.Add(account);
+            Bank.Instance.Accounts.Add(account);
 
             return account.Id;
         }
 
-        public void CloseAccount(Bank bank, Guid accountId)
+        public void CloseAccount(Guid accountId)
         {
-            var account = SearchAccount(bank, accountId);
-            bank.Accounts.Remove(account);
+            var account = SearchAccount(accountId);
+            Bank.Instance.Accounts.Remove(account);
         }
 
-        public void TransferAccount(Bank bank, Guid accountId, Owner owner)
+        public void TransferAccount(Guid accountId, Owner owner)
         {
-            var account = SearchAccount(bank, accountId);
+            var account = SearchAccount(accountId);
 
             _accountManager.ChangeOwner(account, owner);
         }

@@ -25,9 +25,9 @@ namespace BadBankApp
             PresentOwner(owner2);
             Console.WriteLine();
             
-            var account1 = bankManager.OpenAccount(bank, owner1, 500);
-            var account2 = bankManager.OpenAccount(bank, owner1, 2000);
-            var account3 = bankManager.OpenAccount(bank, owner2, 2500);
+            var account1 = bankManager.OpenAccount(owner1, 500);
+            var account2 = bankManager.OpenAccount(owner1, 2000);
+            var account3 = bankManager.OpenAccount(owner2, 2500);
 
             ShowAccounts(bank, owner1);
             Console.WriteLine();
@@ -36,14 +36,14 @@ namespace BadBankApp
             Console.WriteLine();
 
             Console.WriteLine("Money transfers!");
-            bankManager.TransferMoney(bank, 500, account2, account1);
-            bankManager.TransferMoney(bank, 500, account3, account1);
+            bankManager.TransferMoney(500, account2, account1);
+            bankManager.TransferMoney(500, account3, account1);
 
             ShowAccounts(bank);
             Console.WriteLine();
 
             Console.WriteLine("Account transfer!");
-            bankManager.TransferAccount(bank, account2, owner2);
+            bankManager.TransferAccount(account2, owner2);
 
             ShowAccounts(bank, owner1);
             Console.WriteLine();
