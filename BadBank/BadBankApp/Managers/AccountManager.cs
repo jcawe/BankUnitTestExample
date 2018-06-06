@@ -5,8 +5,6 @@ namespace BadBankApp.Managers
 {
     public class AccountManager
     {
-        public AccountManager() { }
-
         private bool CheckWithdraw(Account account, decimal money)
             => account.Money >= money;
 

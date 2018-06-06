@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "identifier": "buildBad",
+            "label": "Build BadBank",
+            "command": "dotnet",
+            "type": "process",
+            "group": "build",
+            "args": [
+                "build",
+                "${workspaceFolder}/BadBank/BadBank.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "identifier": "buildGood",
+            "label": "Build GoodBank",
+            "command": "dotnet",
+            "type": "process",
+            "group": "build",
+            "args": [
+                "build",
+                "${workspaceFolder}/GoodBank/GoodBank.sln"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

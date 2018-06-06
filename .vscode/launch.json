@@ -1,0 +1,36 @@
+{
+   // Use IntelliSense to find out which attributes exist for C# debugging
+   // Use hover for the description of the existing attributes
+   // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+   "version": "0.2.0",
+   "configurations": [
+        {
+            "name": "Launch Badbank",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildBad",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/BadBank/BadBankApp/bin/Debug/netcoreapp2.0/BadBankApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/BadBank/BadBankApp",
+            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "console": "externalTerminal",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        },
+        {
+            "name": "Launch Goodbank",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "buildGood",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/GoodBank/GoodBankApp/bin/Debug/netcoreapp2.0/GoodBankApp.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/GoodBank/GoodBankApp",
+            // For more information about the 'console' field, see https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window
+            "console": "externalTerminal",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ,]
+}
