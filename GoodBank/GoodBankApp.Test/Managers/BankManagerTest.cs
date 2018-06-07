@@ -21,8 +21,11 @@ namespace GoodBankApp.Test.Managers
             manager = new BankManager(mockBankFactory.Object, mockAccountManager.Object);
         }
 
-        private Account CreateStubAccount(decimal money, string firstName, string lastName, Guid id = default(Guid))
+        private Account CreateStubAccount(decimal money, string firstName, string lastName, Guid id)
              => new Account(id, money, new Owner(Guid.NewGuid(), firstName, lastName));
+        
+        private Account CreateStubAccount(decimal money, string firstName, string lastName)
+            => CreateStubAccount(money, firstName, lastName, Guid.NewGuid());
 
         private Bank CreateStubBank(string name, params Account[] accounts)
             => new Bank(name, accounts);
@@ -68,9 +71,12 @@ namespace GoodBankApp.Test.Managers
         [Test]
         [TestCase("de9847ff-bd1b-477e-abcb-02550f58cd8f", "f53cfc25-5e30-4775-b12f-a12f82d905c6")]
         [TestCase("f53cfc25-5e30-4775-b12f-a12f82d905c6", "de9847ff-bd1b-477e-abcb-02550f58cd8f")]
-        public void TransferMoneyWithAccountNotInBank(Guid sourceId, Guid targetId)
+        public void TransferMoneyWithAccountNotInBank(string sourceIdStr, string targetIdStr)
         {
             // Given
+            var sourceId = Guid.Parse(sourceIdStr);
+            var targetId = Guid.Parse(targetIdStr);
+
             var foundId = Guid.Parse("f53cfc25-5e30-4775-b12f-a12f82d905c6");
             var notFoundId = Guid.Parse("de9847ff-bd1b-477e-abcb-02550f58cd8f");
             var account = CreateStubAccount(0, "John", "Doe", foundId);
@@ -91,6 +97,9 @@ namespace GoodBankApp.Test.Managers
             var account2 = CreateStubAccount(0, "Jane", "Doe");
             var bank = CreateStubBank("GoodBankTest", account1, account2);
             var money = 50;
+
+            mockAccountManager.Setup(m => m.Withdraw(account1, money));
+            mockAccountManager.Setup(m => m.Deposit(account2, money));
 
             // When
             manager.TransferMoney(bank, money, account1.Id, account2.Id);

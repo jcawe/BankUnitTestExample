@@ -9,13 +9,13 @@ namespace GoodBankApp.Test.Managers
 {
     public class AccountManagerTest
     {
-        private Mock<AccountFactory> mockAccountFactory;
+        private Mock<IAccountFactory> mockAccountFactory;
         private AccountManager manager;
 
         [SetUp]
         public void Setup()
         {
-            mockAccountFactory = new Mock<AccountFactory>();
+            mockAccountFactory = new Mock<IAccountFactory>();
             manager = new AccountManager(mockAccountFactory.Object);
         }
 
