@@ -27,6 +27,7 @@ namespace BadBankApp.Test.Managers
 
             Assert.AreEqual(1, Bank.Instance.Accounts.Count);
             Assert.AreEqual(money, Bank.Instance.Accounts[0].Money);
+            Assert.AreEqual(owner, Bank.Instance.Accounts[0].Owner);
         }
     }
 }
